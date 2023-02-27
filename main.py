@@ -4,31 +4,42 @@ while True:
         case 'A':
             todo = input("Enter Todo: ") + '\n'
 
-            file = open("data/todos.txt", 'r')
-            todos = file.readlines()
-            file.close()
-
+            with open("data/todos.txt", 'r') as file:
+                todos = file.readlines()
             todos.append(todo)
 
-            file = open("data/todos.txt", 'w')
-            file.writelines(todos)
-            file.close()
-        case 'S':
-            file = open("data/todos.txt", 'r')
-            todos = file.readlines()
-            file.close()
+            with open("data/todos.txt", 'w') as file:
+                file.writelines(todos)
 
+        case 'S':
+            with open("data/todos.txt", 'r') as file:
+                todos = file.readlines()
             for index, item in enumerate(todos):
-                print(f"{index + 1}-{item}")
+                item = item.strip("\n")
+                print(f"{index + 1}-{item.strip()}")
         case 'E':
             number = int(input("Number of the ToDo to Edit: "))
             number = number - 1
             new_todo = input("Enter the New Todo: ")
-            todos[number] = new_todo
+            with open("data/todos.txt", 'r') as file:
+                todos = file.readlines()
+            todos[number] = new_todo + "\n"
+
+            # updates the new todo
+            with open("data/todos.txt", "w") as file:
+                file.writelines(todos)
 
         case 'D':
             number = int(input("Number of ToDo to Remove: "))
+            with open("data/todos.txt", "r") as file:
+                todos = file.readlines()
+            todo_to_remove = todos[number - 1].strip("\n")
             todos.pop(number - 1)
+
+            with open("data/todos.txt", "w") as file:
+                file.writelines(todos)
+            print(f"Todo: '{todo_to_remove}' has been removed")
+
         case 'X':
             break
 print("Bye...")
